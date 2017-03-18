@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+{% block content %}
+     <div id="page-wrapper">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h3 class="page-header">Lebo|服务器资产管理</h3>
+                </div>
+                <!-- /.col-lg-12 -->
+            </div>
+    <div class="row">
+     <div class="btn-group pull-right">
+
+                <div class="btn-group dropdown">
+                    <a href="#" class="btn btn-info dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                        <span class="glyphicon glyphicon-filter"></span>&nbsp;系统&nbsp;<span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">所有系统</a></li>
+                        {% for system in system_list %}
+                        <li><a href="#">{{ system.name }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+
+                <div class="btn-group dropdown">
+                    <a href="#" class="btn btn-info dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                        <span class="glyphicon glyphicon-filter"></span>&nbsp;机房&nbsp;<span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">所有机房</a></li>
+                        {% for idc in idc_list %}
+                        <li><a href="#">{{ idc.name }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+
+                <a class="btn btn-info" href="/admin/CMDB/server/add/" target="_blank"><span class="glyphicon glyphicon-plus"></span>&nbsp;服务器</a>
+            </div>
+    </div>
+     <div class="row" style="margin-top: 10px">
+            <div class="table-responsive">
+            <table class="table table-hover table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>IP地址</th>
+                        <th>服务器名称</th>
+                        <th>系统类型</th>
+                        <th>所属机房</th>
+                        <th>机架位置</th>
+                        <th>上架日期</th>
+                        <th>使用状态</th>
+                        <th>主机</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                {% for server in server_list %}
+                    <tbody>
+                        <tr>
+                            <td><a href="#" title="详细信息"  data-toggle="modal" data-target="#server_modal">
+                                {{ server.ip }}</a></td>
+                            <td>{{ server.name }}</td>
+                            <td>{{ server.ip.host.system_type.name }}</td>
+                            <td>{{ server.idc }}</td>
+                            <td>{{ server.location }}</td>
+                            <td>{{ server.start_date }}</td>
+                            <td>{{ server.status }}</td>
+                            <td><a href="#">
+                                {{ server.host_set.count }}台</a></td>
+                            <td>
+                                <a class="btn btn-info btn-xs" href="/admin/CMDB/server/{{ server.id }}/" target="_blank">
+                                    <span class="glyphicon glyphicon-edit"></span>&nbsp;修&nbsp;改
+                                </a>
+                            </td>
+                        </tr>
+                    </tbody>
+                {% endfor %}
+            </table>
+        </div>
+
+    </div>
+    <div class="modal fade" id="server_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+      <div class="modal-dialog">
+        <div class="modal-content"></div>
+      </div>
+    </div>
+     </div>
+    </div>
+
+{% endblock %}
+
+{% block scripts %}
+    <script>
+         $('#server_modal').on('hidden.bs.modal', function () {
+            $(this).removeData("bs.modal")
+              ;})
+    </script>
+{% endblock %}
